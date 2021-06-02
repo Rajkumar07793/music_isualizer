@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:music_visualizer/screens/homepage.dart';
+import 'package:music_visualizer/screens/loading_animation.dart';
+import 'package:music_visualizer/screens/loading_dots.dart';
+import 'package:music_visualizer/screens/spinner.dart';
+import 'package:music_visualizer/screens/spinner1.dart';
+import 'package:music_visualizer/screens/spinner2.dart';
+import 'package:music_visualizer/screens/spinner3.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,37 +16,65 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter Animations Tutorial',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(backgroundColor: Colors.black,body: Center(child: Container(child: _MusicVisualizer()))),
+      home: Index(),
     );
   }
 }
 
-class _MusicVisualizer extends StatefulWidget {
-  @override
-  __MusicVisualizerState createState() => __MusicVisualizerState();
-}
-
-class __MusicVisualizerState extends State<_MusicVisualizer> {
-  List<Color> colors = [
-    Colors.blueAccent,
-    Colors.greenAccent,
-    Colors.redAccent,
-    Colors.yellowAccent
-  ];
-
-  List<int> duration = [900, 700, 600, 800, 500];
+class Index extends StatelessWidget {
+  const Index({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: new List<Widget>.generate(
-            30,
-            (index) => VisualComponent(
-                duration: duration[index % 5], color: colors[index % 4])));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Animations"),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: [
+          listTile(context, "Music Visualizer", MusicVisualizer()),
+          listTile(context, "Loading Animation", Loading()),
+          listTile(
+              context,
+              "Loading Dots",
+              ShowDots(
+                mainAxisAlignment: MainAxisAlignment.center,
+              )),
+          listTile(context, "Spin", Spin()),
+          listTile(context, "Spin1", Spin1()),
+          listTile(context, "Spin2", Spin2()),
+          listTile(
+              context,
+              "Spin3",
+              WidgetCircularAnimator(
+                child: Center(child: Text("RK",style: TextStyle(inherit: false,fontSize: 33),)),
+              )),
+        ],
+      ),
+    );
   }
+}
+
+Widget listTile(context, title, screen) {
+  return Card(
+    elevation: 10,
+    // color: Colors.cyanAccent,
+    child: ListTile(
+      tileColor: Colors.lime,
+      title: Text(
+        title,
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+      ),
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => screen));
+      },
+    ),
+  );
 }
