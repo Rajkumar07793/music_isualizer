@@ -40,6 +40,8 @@ class _WidgetAnimatorState extends State<WidgetCircularAnimator>
     with TickerProviderStateMixin {
   Animation<double> animation1;
   Animation<double> animation2;
+  Animation<Color> animation3;
+  AnimationController controller3;
   AnimationController controller2;
   AnimationController controller1;
 
@@ -64,6 +66,7 @@ class _WidgetAnimatorState extends State<WidgetCircularAnimator>
 
   @override
   void dispose() {
+    controller3.dispose();
     controller2.dispose();
     controller1.dispose();
     super.dispose();
@@ -88,7 +91,7 @@ class _WidgetAnimatorState extends State<WidgetCircularAnimator>
         turns: animation2,
         child: CustomPaint(
           painter: Arc2Painter(
-              color: widget.outerColor, iconsSize: widget.innerIconsSize),
+              color: animation3.value, iconsSize: widget.innerIconsSize),
           child: Container(
             width: widget.size,
             height: widget.size,
@@ -104,7 +107,7 @@ class _WidgetAnimatorState extends State<WidgetCircularAnimator>
         turns: animation1,
         child: CustomPaint(
           painter: Arc1Painter(
-              color: widget.innerColor, iconsSize: widget.outerIconsSize),
+              color: animation3.value, iconsSize: widget.outerIconsSize),
           child: Container(
             width: 0.85 * widget.size,
             height: 0.85 * widget.size,
@@ -121,6 +124,9 @@ class _WidgetAnimatorState extends State<WidgetCircularAnimator>
     controller2 = AnimationController(
         duration: Duration(seconds: widget.outerAnimationSeconds), vsync: this);
 
+    controller3 = AnimationController(
+        duration: Duration(seconds: 1), vsync: this);
+
     animation1 = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: controller1,
         curve: Interval(0.0, 1.0, curve: widget.innerAnimation)));
@@ -135,6 +141,14 @@ class _WidgetAnimatorState extends State<WidgetCircularAnimator>
         ? animation2 = ReverseAnimation(secondAnimation)
         : animation2 = secondAnimation;
 
+    animation3 = ColorTween(begin: Colors.green, end: Colors.blue).animate(CurvedAnimation(
+        parent: controller3,
+        curve: Interval(0.0, 1.0, curve: widget.innerAnimation)))..addListener(() {
+          setState(() {
+          });
+    });
+
+    controller3.repeat();
     controller2.repeat();
     controller1.repeat();
   }

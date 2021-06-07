@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class ShowDots extends StatefulWidget {
   final Tween tween;

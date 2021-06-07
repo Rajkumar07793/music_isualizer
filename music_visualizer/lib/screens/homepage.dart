@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter/animation.dart';
 
-
 class MusicVisualizer extends StatefulWidget {
   @override
   _MusicVisualizerState createState() => _MusicVisualizerState();
